@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,7 +19,7 @@ class UserController extends Controller
      */
     public function index(): Response
     {
-        return response(User::all(), Response::HTTP_OK);
+        return response(User::paginate(), Response::HTTP_OK);
     }
 
     /**
