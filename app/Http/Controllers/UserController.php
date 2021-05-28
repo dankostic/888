@@ -15,12 +15,12 @@ class UserController extends Controller
 {
     public function index()
     {
-        return User::all();
+        return response(User::all(), Response::HTTP_OK);
     }
 
     public function show(User $user)
     {
-        return $user;
+        return response($user, Response::HTTP_OK);
     }
 
     public function store(Request $request)
@@ -31,7 +31,6 @@ class UserController extends Controller
         );
 
         return response($user, Response::HTTP_CREATED);
-
     }
 
     public function update(Request $request, User $user)
@@ -46,7 +45,6 @@ class UserController extends Controller
         $user->save();
 
         return response($user, Response::HTTP_ACCEPTED);
-
     }
 
     public function destroy(User $user)
