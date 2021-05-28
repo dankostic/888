@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -13,41 +15,54 @@ use Illuminate\Support\Facades\Hash;
  */
 class UserController extends Controller
 {
-    public function index()
+    /**
+     * @return Response
+     */
+    public function index(): Response
     {
         return response(User::all(), Response::HTTP_OK);
     }
 
-    public function show(User $user)
+    /**
+     * @param User $user
+     * @return Response
+     */
+    public function show(User $user): Response
     {
         return response($user, Response::HTTP_OK);
     }
 
-    public function store(Request $request)
+    /**
+     * @param UserCreateRequest $request
+     * @return Response
+     */
+    public function store(UserCreateRequest $request): Response
     {
         $user = User::create(
-            $request->only('first_name', 'last_name', 'email', 'role_id')
+            $request->only('first_name', 'last_name', 'username', 'email', 'role_id')
             + ['password' => Hash::make('bassword')]
         );
 
         return response($user, Response::HTTP_CREATED);
     }
 
-    public function update(Request $request, User $user)
+    /**
+     * @param UserUpdateRequest $request
+     * @param User $user
+     * @return Response
+     */
+    public function update(UserUpdateRequest $request, User $user): Response
     {
-        $user->update(
-            [
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-            ]
-        );
-        $user->save();
+        $user->update($request->only('first_name', 'last_name', 'username', 'email'));
 
         return response($user, Response::HTTP_ACCEPTED);
     }
 
-    public function destroy(User $user)
+    /**
+     * @param User $user
+     * @return Response
+     */
+    public function destroy(User $user): Response
     {
         $user->delete();
         return response(null, Response::HTTP_NO_CONTENT);
