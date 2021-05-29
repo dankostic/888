@@ -6,7 +6,9 @@ use App\Http\Requests\UpdateInfoRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Auth;
@@ -18,20 +20,20 @@ use Auth;
 class UserController extends Controller
 {
     /**
-     * @return Response
+     * @return ResourceCollection
      */
-    public function index(): Response
+    public function index(): ResourceCollection
     {
-        return response(User::with('role')->paginate(), Response::HTTP_OK);
+        return UserResource::collection(User::paginate());
     }
 
     /**
      * @param User $user
-     * @return Response
+     * @return UserResource
      */
-    public function show(User $user): Response
+    public function show(User $user): UserResource
     {
-        return response($user, Response::HTTP_OK);
+        return new UserResource($user);
     }
 
     /**
@@ -48,7 +50,7 @@ class UserController extends Controller
             ]
         );
 
-        return response($user, Response::HTTP_CREATED);
+        return response(new UserResource($user), Response::HTTP_CREATED);
     }
 
     /**
@@ -60,7 +62,7 @@ class UserController extends Controller
     {
         $user->update($request->only('first_name', 'last_name', 'username', 'email'));
 
-        return response($user, Response::HTTP_ACCEPTED);
+        return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -78,7 +80,7 @@ class UserController extends Controller
      */
     public function user(): Response
     {
-        return response(Auth::user(), Response::HTTP_OK);
+        return response(new UserResource(Auth::user()), Response::HTTP_OK);
     }
 
     public function info(UpdateInfoRequest $request): Response
@@ -86,7 +88,7 @@ class UserController extends Controller
         $user = Auth::user();
         $user->update($request->only('first_name', 'last_name', 'username', 'email'));
 
-        return response($user, Response::HTTP_ACCEPTED);
+        return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }
 
     public function password(UpdatePasswordRequest $request): Response
@@ -96,6 +98,6 @@ class UserController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
-        return response($user, Response::HTTP_ACCEPTED);
+        return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }
 }
