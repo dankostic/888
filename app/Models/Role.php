@@ -20,4 +20,14 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
+
+    /**
+     * @var string[]
+     */
+    protected $guarded = ['id'];
+
+    /**
+     * @var bool
+     */
+    public $timestamps = false;
 }

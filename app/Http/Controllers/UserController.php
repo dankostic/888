@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateInfoRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
@@ -77,7 +79,7 @@ class UserController extends Controller
         return response(Auth::user(), Response::HTTP_OK);
     }
 
-    public function info(Request $request): Response
+    public function info(UpdateInfoRequest $request): Response
     {
         $user = Auth::user();
         $user->update($request->only('first_name', 'last_name', 'username', 'email'));
@@ -85,7 +87,7 @@ class UserController extends Controller
         return response($user, Response::HTTP_ACCEPTED);
     }
 
-    public function password(Request $request): Response
+    public function password(UpdatePasswordRequest $request): Response
     {
         $user = Auth::user();
         $user->update([
