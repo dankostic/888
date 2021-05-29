@@ -85,4 +85,12 @@ class User extends Authenticatable
     {
         return 'username';
     }
+
+    /**
+     * @return object
+     */
+    public function role(): object
+    {
+        return $this->belongsTo(Role::class);
+    }
 }

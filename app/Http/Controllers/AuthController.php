@@ -34,7 +34,7 @@ class AuthController extends Controller
             $request->only('first_name', 'last_name', 'username', 'email')
             + [
                 'password' => Hash::make($request->input('password')),
-                'role_id' => null,
+                'role_id' => 3,
             ]
         );
 

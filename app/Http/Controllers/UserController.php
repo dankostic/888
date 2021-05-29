@@ -7,7 +7,6 @@ use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Auth;
@@ -23,7 +22,7 @@ class UserController extends Controller
      */
     public function index(): Response
     {
-        return response(User::paginate(), Response::HTTP_OK);
+        return response(User::with('role')->paginate(), Response::HTTP_OK);
     }
 
     /**
@@ -42,8 +41,11 @@ class UserController extends Controller
     public function store(UserCreateRequest $request): Response
     {
         $user = User::create(
-            $request->only('first_name', 'last_name', 'username', 'email', 'role_id')
-            + ['password' => Hash::make('bassword')]
+            $request->only('first_name', 'last_name', 'username', 'email')
+            + [
+                'password' => Hash::make('bassword'),
+                'role_id' => 3
+            ]
         );
 
         return response($user, Response::HTTP_CREATED);
