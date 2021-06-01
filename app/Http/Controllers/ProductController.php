@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductCreateRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
@@ -22,12 +24,14 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  ProductCreateRequest $request
+     * @return Response
      */
-    public function store(Request $request)
+    public function store(ProductCreateRequest $request): Response
     {
-        //
+        $product = Product::create($request->only('title', 'description', 'image', 'price'));
+
+        return response($product, Response::HTTP_CREATED);
     }
 
     /**

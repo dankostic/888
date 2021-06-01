@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('user', [UserController::class, 'user']);
     Route::put('user/info', [UserController::class, 'info']);
     Route::put('user/password', [UserController::class, 'password']);
+    Route::post('upload', [ImageController::class, 'upload']);
     Route::apiResource('users', UserController::class);
     Route::apiResource('products', ProductController::class);
 });
